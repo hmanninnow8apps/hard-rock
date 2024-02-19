@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            
+        }
+
+        #resetPasswordForm{
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid black;
+            border-radius: 3px;
+            margin: 100px auto;
+            background-color: white;
+            width: 500px
+        }
+
+        .bar{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 60%;
+            margin: 10px 5px;
+        }
+
+        button{
+            padding: 10px 5px;
+            background-color: green;
+            color: white;
+            width: 40%;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+    </style>
+    <title>Reset Password</title>
+</head>
+<body>
+    
+    
+    <form id="resetPasswordForm" action='' method="post" type="text/css">
+        <h2>Reset Password</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam dolores tempore laudantium reprehenderit nulla, impedit velit quidem unde molestias id distinctio, nemo officia minima saepe fugiat repellat praesentium suscipit soluta!</p>
+        <% if(typeof success != 'undefined && success) { %>
+            <h4 style="color: rgb(0, 149, 255);">Your password is successfully changed login again!</h4>
+        <%}%>
+        <% if(typeof timeout != 'undefined && timeout) { %>
+            <h4 style="color: rgb(255, 0, 51);">Time to change the password has expired!</h4>
+        <%}%>
+        <% if(typeof user_not_found != 'undefined && user_not_found) { %>
+            <h4 style="color: rgb(255, 0, 51);">This is not a valid user!</h4>
+        <%}%>
+        <div class="bar">
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="bar">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+        </div>
+        <span id="confirmPasswordError" style="color: red; display: none;">Passwords do not match</span>
+        <button type="submit" id="submitButton">Reset Password</button>
+    </form>
+
+    <script>
+        // Get the user ID and token from the URL
+        const userID = window.location.split('/')[3];
+        const token = window.location.split('/')[4];
+
+        // Set the action attribute of the form dynamically
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        resetPasswordForm.action = `http://192.168.1.60:5000/forgot-password/reset-password/${userID}/${token}`;
+
+        // Add event listener to validate passwords
+        resetPasswordForm.addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+            if (password !== confirmPassword) {
+                confirmPasswordError.style.display = 'block';
+                event.preventDefault(); // Prevent form submission
+            } else {
+                confirmPasswordError.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
